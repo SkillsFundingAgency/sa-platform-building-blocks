@@ -72,12 +72,6 @@
         "description": "The email address that threat alerts will be sent to"
       }
     },
-    "sqlStorageAccountName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the SQL logs storage account for the environment"
-      }
-    },
     "logAnalyticsWorkspaceName": {
       "type": "string",
       "defaultValue": "",
@@ -194,14 +188,6 @@
           ],
           "properties": {
             "state": "Enabled",
-            "storageEndpoint": "[concat('https://', parameters('sqlStorageAccountName'), '.blob.core.windows.net/')]",
-            "storageAccountAccessKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('sqlStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]",
-            "retentionDays": 90,
-            "auditActionsAndGroups": [
-              "BATCH_COMPLETED_GROUP",
-              "SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP",
-              "FAILED_DATABASE_AUTHENTICATION_GROUP"
-            ],
             "isAzureMonitorTargetEnabled": true
           }
         },

@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
       "environmentTag": {
@@ -53,9 +53,17 @@
         "type": "array",
         "defaultValue": []
       },
-      "ipRangeFilter": {
-        "type": "string",
-        "defaultValue": ""
+      "ipRules": {
+        "type": "array",
+        "defaultValue": []
+      },
+      "backupIntervalInMinutes": {
+        "type": "int",
+        "defaultValue": 240
+      },
+      "backupRetentionIntervalInHours": {
+        "type": "int",
+        "defaultValue": 8
       }
     },
     "variables": {
@@ -75,7 +83,7 @@
       {
         "name": "[parameters('cosmosDbName')]",
         "type": "Microsoft.DocumentDB/databaseAccounts",
-        "apiVersion": "2015-04-08",
+        "apiVersion": "2021-03-01-preview",
         "location": "[resourceGroup().location]",
         "kind": "[parameters('cosmosDbType')]",
         "tags": {
@@ -88,24 +96,38 @@
             "Service Offering": "[parameters('serviceOfferingTag')]"
         },
         "properties": {
-          "consistencyPolicy": {
-            "defaultConsistencyLevel": "[parameters('defaultConsistencyLevel')]"
-          },
-          "databaseAccountOfferType": "Standard",
-          "ipRangeFilter": "[parameters('ipRangeFilter')]",
-          "isVirtualNetworkFilterEnabled": "[if(greater(length(variables('virtualNetworkRules')), 0), bool('true'), bool('false'))]",
-          "virtualNetworkRules": "[variables('virtualNetworkRules')]"
+            "consistencyPolicy": {
+                "defaultConsistencyLevel": "[parameters('defaultConsistencyLevel')]"
+            },
+            "databaseAccountOfferType": "Standard",
+            "ipRules": "[parameters('ipRules')]",
+            "isVirtualNetworkFilterEnabled": "[if(greater(length(variables('virtualNetworkRules')), 0), bool('true'), bool('false'))]",
+            "virtualNetworkRules": "[variables('virtualNetworkRules')]",
+            "locations": [
+              {
+                "locationName": "[resourceGroup().location]"
+              }
+            ],
+            "createMode": "Default",
+            "backupPolicy": {
+                    "type": "Periodic",
+                    "periodicModeProperties": {
+                        "backupIntervalInMinutes": "[parameters('backupIntervalInMinutes')]",
+                        "backupRetentionIntervalInHours": "[parameters('backupRetentionIntervalInHours')]",
+                        "backupStorageRedundancy": "Geo"
+                    }
+            }
         }
       }
     ],
     "outputs": {
       "PrimaryMasterKey": {
         "type": "string",
-        "value": "[listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbName')), '2015-04-08').primaryMasterKey]"
+        "value": "[listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbName')), '2021-03-01-preview').primaryMasterKey]"
       },
       "PrimaryReadonlyMasterKey": {
         "type": "string",
-        "value": "[listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbName')), '2015-04-08').primaryReadonlyMasterKey]"
+        "value": "[listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDbName')), '2021-03-01-preview').primaryReadonlyMasterKey]"
       }
     }
   }

@@ -31,20 +31,21 @@
         "description": "Name of the application insights resource"
       }
     },
-    "attachedService": {
-      "defaultValue": "",
-      "type": "string"
+    "workspaceId": {
+      "type": "string",
+      "metadata": {
+        "description": "The workspace id of a log analytics account to attach to"
+      }
     }
   },
   "resources": [
     {
-      "apiVersion": "2015-05-01",
+      "apiVersion": "2020-02-02-preview",
       "name": "[parameters('appInsightsName')]",
       "type": "Microsoft.Insights/components",
       "location": "[resourceGroup().location]",
       "kind": "web",
       "tags": {
-        "[concat('hidden-link:', resourceId('Microsoft.Web/sites', parameters('attachedService')))]": "Resource",
         "Environment": "[parameters('environmentTag')]",
         "Parent Business": "[parameters('parentBusinessTag')]",
         "Portfolio": "[parameters('portfolioTag')]",
@@ -54,7 +55,11 @@
         "Service Offering": "[parameters('serviceOfferingTag')]"
       },
       "properties": {
-        "Application_Type": "web"
+        "ApplicationId": "[parameters('appInsightsName')]",
+        "Application_Type": "web",
+        "Flow_Type": "Bluefield",
+        "Request_Source": "Custom",
+        "WorkspaceResourceId": "[parameters('workspaceId')]"
       }
     }
   ],
@@ -62,6 +67,10 @@
     "InstrumentationKey": {
       "type": "string",
       "value": "[reference(concat('microsoft.insights/components/', parameters('appInsightsName'))).InstrumentationKey]"
+    },
+    "ConnectionString": {
+      "type": "string",
+      "value": "[reference(concat('microsoft.insights/components/', parameters('appInsightsName'))).ConnectionString]"
     },
     "AppId": {
       "type": "string",
