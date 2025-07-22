@@ -1,0 +1,53 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "logAnalyticsName": {
+            "type": "String"
+        },
+        "logAnalyticsLocation": {
+            "type": "string",
+            "allowedValues": [
+                "North Europe",
+                "West Europe"
+            ],
+            "defaultValue": "West Europe"
+        },
+        "logAnalyticsSku": {
+            "type": "String",
+            "defaultValue": "pergb2018",
+            "metadata": {
+                "description": "Pricing Tier for Log Analytics"
+            }
+        },
+        "logAnalyticsSearchVersion": {
+            "type": "Int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "Current SearchVersion for Log Analytics (1)"
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2017-03-15-preview",
+            "name": "[parameters('logAnalyticsName')]",
+            "location": "[parameters('logAnalyticsLocation')]",
+            "properties": {
+                "sku": {
+                    "name": "[parameters('logAnalyticsSku')]"
+                },
+                "features": {
+                    "searchVersion": "[parameters('logAnalyticsSearchVersion')]"
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "workspaceId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsName'))]"
+        }
+    }
+}
