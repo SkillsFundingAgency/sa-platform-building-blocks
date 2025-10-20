@@ -29,7 +29,7 @@
     },
     "applogToBlob": {
       "type": "string",
-      "defaultValue": "Off",
+      "defaultValue": "Warning",
       "allowedValues": [
         "Off",
         "Warning",
