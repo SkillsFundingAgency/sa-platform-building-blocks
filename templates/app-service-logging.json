@@ -78,8 +78,8 @@
     }
   },
   "variables": {
-    "applicationLogBlobName": "[concat(parameters('appServiceResourceName'),'-application-logs')]",
-    "httpLogBlobName": "[concat(parameters('appServiceResourceName'),'-webserver-logs')]",
+    "applicationLogBlobName": "[concat(parameters('appServiceResourceName'),'-weblogs')]",
+    "httpLogBlobName": "[concat(parameters('appServiceResourceName'),'-weblogs')]",
     "serviceSasApplicationProperties": {
       "canonicalizedResource": "[concat('/blob/', parameters('sharedLogStorageAccount'), '/', variables('applicationLogBlobName'))]",
       "signedVersion ": "2018-03-28",
