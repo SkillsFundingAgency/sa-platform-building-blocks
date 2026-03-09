@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appConfigName": {
+      "type": "string",
+      "metadata": {
+        "description": "App Configuration Name"
+      }
+    },
+    "principalId": {
+      "type": "string",
+      "metadata": {
+        "description": "Object ID of the MI, SP, or User receiving the role."
+      }
+    },
+    "roleDefinitionId": {
+      "type": "string",
+      "defaultValue": "/providers/Microsoft.Authorization/roleDefinitions/516239f1-63e1-4d78-a4de-a74fb236a071",
+      "metadata": {
+        "description": "App Configuration Data Reader Role"
+      },
+      "allowedValues": [
+        "/providers/Microsoft.Authorization/roleDefinitions/516239f1-63e1-4d78-a4de-a74fb236a071", // Data Reader
+        "/providers/Microsoft.Authorization/roleDefinitions/5e0bd9bd-7b93-4f28-af87-19fc36adf3be" // Data Owner
+      ]
+    }
+  },
+  "variables": {
+    "assignmentGuid": "[guid(parameters('principalId'), parameters('appConfigName'), parameters('roleDefinitionId'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "name": "[variables('assignmentGuid')]",
+      "properties": {
+        "principalId": "[parameters('principalId')]",
+        "roleDefinitionId": "[parameters('roleDefinitionId')]",
+        "scope": "[resourceId('Microsoft.AppConfiguration/configurationStores', parameters('appConfigName'))]"
+      }
+    }
+  ],
+  "outputs": {
+    "assignedRoleId": {
+      "type": "string",
+      "value": "[variables('assignmentGuid')]"
+    }
+  }
+}
