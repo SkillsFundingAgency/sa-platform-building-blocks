@@ -22,7 +22,7 @@
       },
       "allowedValues": [
         "/providers/Microsoft.Authorization/roleDefinitions/516239f1-63e1-4d78-a4de-a74fb236a071", // Data Reader
-        "/providers/Microsoft.Authorization/roleDefinitions/5e0bd9bd-7b93-4f28-af87-19fc36adf3be" // Data Owner
+        "/providers/Microsoft.Authorization/roleDefinitions/5ae67dd6-50cb-40e7-96ff-dc2bfa4b606b" // Data Owner
       ]
     }
   },
