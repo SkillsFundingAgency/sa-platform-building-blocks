@@ -27,7 +27,7 @@
     }
   },
   "variables": {
-    "assignmentGuid": "[guid(parameters('principalId'), resourceId('Microsoft.AppConfiguration/configurationStores', parameters('appConfigName')), parameters('roleDefinitionId'),'v2')]"
+    "assignmentGuid": "[guid(parameters('principalId'), resourceId('Microsoft.AppConfiguration/configurationStores', parameters('appConfigName')), parameters('roleDefinitionId'))]"
   },
   "resources": [
     {
