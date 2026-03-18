@@ -27,17 +27,17 @@
     }
   },
   "variables": {
-    "assignmentGuid": "[guid(parameters('principalId'), parameters('appConfigName'), parameters('roleDefinitionId'))]"
+    "assignmentGuid": "[guid(parameters('principalId'), resourceId('Microsoft.AppConfiguration/configurationStores', parameters('appConfigName')), parameters('roleDefinitionId'))]"
   },
   "resources": [
     {
       "type": "Microsoft.Authorization/roleAssignments",
       "apiVersion": "2022-04-01",
       "name": "[variables('assignmentGuid')]",
+      "scope": "[resourceId('Microsoft.AppConfiguration/configurationStores', parameters('appConfigName'))]",
       "properties": {
         "principalId": "[parameters('principalId')]",
-        "roleDefinitionId": "[parameters('roleDefinitionId')]",
-        "scope": "[resourceId('Microsoft.AppConfiguration/configurationStores', parameters('appConfigName'))]"
+        "roleDefinitionId": "[parameters('roleDefinitionId')]"
       }
     }
   ],
